@@ -8,11 +8,19 @@ import DodgingButton from './components/DodgingButton';
 import './App.css';
 
 const apologyMessages = [
-  "I know I messed up, and I can't stop thinking about it.",
-  "Our friendship means absolutely everything to me.",
-  "I realize my mistake and how it made you feel.",
-  "I am truly, deeply sorry.",
-  "You're one of the best things in my life, and I hate that I hurt you."
+  { text: "I know I messed up, and I can't stop thinking about it." },
+  { 
+    text: "Our friendship means absolutely everything to me.", 
+    // Uncomment and add your image name here (make sure the file is in the public/ folder)
+    // image: "/memory1.jpg" 
+  },
+  { text: "I realize my mistake and how it made you feel." },
+  { 
+    text: "I am truly, deeply sorry.", 
+    // Uncomment and add your video name here (make sure the file is in the public/ folder)
+    // video: "/funny-memory.mp4" 
+  },
+  { text: "You're one of the best things in my life, and I hate that I hurt you." }
 ];
 
 function App() {
@@ -56,7 +64,13 @@ function App() {
               className="cards-container"
             >
               {apologyMessages.map((msg, index) => (
-                <MessageCard key={index} text={msg} delay={index * 1.5} />
+                <MessageCard 
+                  key={index} 
+                  text={msg.text} 
+                  image={msg.image} 
+                  video={msg.video} 
+                  delay={index * 1.5} 
+                />
               ))}
 
               <motion.div
