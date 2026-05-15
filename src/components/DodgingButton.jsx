@@ -8,14 +8,17 @@ const DodgingButton = ({ onClick, text = "No" }) => {
   const handleHover = () => {
     if (!buttonRef.current) return;
     
-    // Calculate random offset to move the button away from the cursor
-    // The bounds are kept relatively close so it stays within view
-    const xOffset = (Math.random() - 0.5) * 300;
-    const yOffset = (Math.random() - 0.5) * 300;
+    // Check if mobile
+    const isMobile = window.innerWidth < 768;
+    const maxOffset = isMobile ? 120 : 300;
+    const minMove = isMobile ? 40 : 50;
     
-    // Ensure it doesn't move too little
-    const finalX = Math.abs(xOffset) < 50 ? xOffset * 2 : xOffset;
-    const finalY = Math.abs(yOffset) < 50 ? yOffset * 2 : yOffset;
+    const xOffset = (Math.random() - 0.5) * maxOffset;
+    const yOffset = (Math.random() - 0.5) * maxOffset;
+    
+    // Ensure it doesn't move too little, but keep it within bounds
+    const finalX = Math.abs(xOffset) < minMove ? (xOffset >= 0 ? minMove : -minMove) * 1.5 : xOffset;
+    const finalY = Math.abs(yOffset) < minMove ? (yOffset >= 0 ? minMove : -minMove) * 1.5 : yOffset;
 
     setPosition({ x: finalX, y: finalY });
   };

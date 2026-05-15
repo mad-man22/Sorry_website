@@ -3,8 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import ParticleBackground from './components/ParticleBackground';
+import BackgroundBlobs from './components/BackgroundBlobs';
+import ShootingStars from './components/ShootingStars';
+import Fireflies from './components/Fireflies';
 import MessageCard from './components/MessageCard';
 import DodgingButton from './components/DodgingButton';
+import Balloons from './components/Balloons';
+import VideoCarousel from './components/VideoCarousel';
 import './App.css';
 
 const apologyMessages = [
@@ -35,16 +40,19 @@ function App() {
 
   return (
     <>
+      <BackgroundBlobs />
       <ParticleBackground />
+      <ShootingStars />
+      <Fireflies />
       <div className="app-container">
         <AnimatePresence mode="wait">
           {stage === 'entrance' && (
             <motion.div
               key="entrance"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 1 }}
+              initial={{ opacity: 0, scale: 0.5, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50, scale: 0.8 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
               <h1 className="title">I messed up.</h1>
@@ -58,9 +66,10 @@ function App() {
           {stage === 'apology' && (
             <motion.div
               key="apology"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
               className="cards-container"
             >
               {apologyMessages.map((msg, index) => (
@@ -89,10 +98,10 @@ function App() {
           {stage === 'ask' && (
             <motion.div
               key="ask"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, scale: 0.5, rotate: 10 }}
+              transition={{ type: "spring", stiffness: 250, damping: 20 }}
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3rem' }}
             >
               <h2 className="title" style={{ fontSize: '2.5rem' }}>Will you forgive me?</h2>
@@ -109,31 +118,19 @@ function App() {
           {stage === 'resolution' && (
             <motion.div
               key="resolution"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, type: "spring" }}
+              initial={{ opacity: 0, scale: 0.5, y: 100 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 150, damping: 15 }}
               className="resolution-container"
             >
               <Confetti width={width} height={height} recycle={false} numberOfPieces={800} gravity={0.15} />
+              <Balloons />
+              
               <h1 className="resolution-title">Thank You! 💖</h1>
               <p className="final-message">I promise to make it up to you.</p>
 
-              {/* Replace "/your-video.mp4" with your actual video filename in the public/ folder */}
-              <video
-                src="/video_funny.mp4"
-                controls
-                autoPlay
-                muted
-                loop
-                style={{
-                  width: '100%',
-                  maxWidth: '500px',
-                  borderRadius: '1rem',
-                  marginTop: '2rem',
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
-                  zIndex: 10
-                }}
-              />
+              {/* Add your videos to the public/ folder and list them below */}
+              <VideoCarousel videos={['/video_funny.mp4', '/video_cute.mp4', '/video_memories.mp4']} />
             </motion.div>
           )}
         </AnimatePresence>

@@ -19,19 +19,29 @@ const ParticleBackground = () => {
     window.addEventListener('resize', resize);
     resize();
 
-    window.addEventListener('mousemove', (e) => {
+    const handleMouseMove = (e) => {
       mouse.x = e.x;
       mouse.y = e.y;
-    });
+    };
+    
+    const handleMouseLeave = () => {
+      mouse.x = null;
+      mouse.y = null;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
 
     class Particle {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.1;
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.baseColor = `rgba(139, 92, 246, ${Math.random() * 0.5 + 0.1})`; // Purple hue
+        this.size = Math.random() * 2 + 0.5;
+        this.baseSize = this.size;
+        this.speedX = Math.random() * 0.8 - 0.4;
+        this.speedY = Math.random() * 0.8 - 0.4;
+        const opacity = Math.random() * 0.5 + 0.2;
+        this.baseColor = `rgba(139, 92, 246, ${opacity})`; 
       }
 
       update() {
@@ -47,9 +57,17 @@ const ParticleBackground = () => {
           let dx = mouse.x - this.x;
           let dy = mouse.y - this.y;
           let distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 100) {
-            this.size = 3;
-          } else if (this.size > 0.1) {
+          
+          if (distance < 120) {
+            // Pull slightly towards mouse
+            this.x += dx * 0.01;
+            this.y += dy * 0.01;
+            this.size = this.baseSize * 2;
+          } else if (this.size > this.baseSize) {
+            this.size -= 0.1;
+          }
+        } else {
+          if (this.size > this.baseSize) {
             this.size -= 0.1;
           }
         }
@@ -57,15 +75,19 @@ const ParticleBackground = () => {
 
       draw() {
         ctx.fillStyle = this.baseColor;
+        // Adding a subtle glow effect
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(139, 92, 246, 0.8)';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
+        ctx.shadowBlur = 0; // reset for lines
       }
     }
 
     const init = () => {
       particles = [];
-      const numParticles = Math.floor((canvas.width * canvas.height) / 10000);
+      const numParticles = Math.floor((canvas.width * canvas.height) / 8000);
       for (let i = 0; i < numParticles; i++) {
         particles.push(new Particle());
       }
@@ -73,12 +95,34 @@ const ParticleBackground = () => {
 
     init();
 
+    const connectParticles = () => {
+      let maxDistance = 120;
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a; b < particles.length; b++) {
+          let dx = particles[a].x - particles[b].x;
+          let dy = particles[a].y - particles[b].y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < maxDistance) {
+            let opacity = 1 - (distance / maxDistance);
+            ctx.strokeStyle = `rgba(139, 92, 246, ${opacity * 0.4})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
+
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
       }
+      connectParticles();
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -86,6 +130,8 @@ const ParticleBackground = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
       window.cancelAnimationFrame(animationFrameId);
     };
   }, []);

@@ -11,12 +11,20 @@
 }
 
 .title {
-  font-size: 3rem;
-  font-weight: 600;
+  font-size: 3.5rem;
+  font-weight: 700;
   margin-bottom: 1rem;
-  background: linear-gradient(to right, #e2e8f0, #94a3b8);
+  background: linear-gradient(270deg, #e2e8f0, #8b5cf6, #38bdf8, #e2e8f0);
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: gradientText 6s ease infinite;
+}
+
+@keyframes gradientText {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .subtitle {
@@ -34,6 +42,13 @@
   width: 100%;
   max-width: 600px;
   margin-bottom: 3rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
 
 .resolution-container {
@@ -42,6 +57,7 @@
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+  width: 100%;
 }
 
 .resolution-title {
@@ -54,4 +70,65 @@
   font-size: 1.5rem;
   color: var(--text-secondary);
   font-weight: 300;
+  z-index: 10;
+}
+
+.carousel-nav-btn {
+  background: rgba(20, 184, 166, 0.6);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.carousel-nav-btn:hover {
+  background: rgba(20, 184, 166, 0.9);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(20, 184, 166, 0.5);
+}
+
+.video-wrapper {
+  aspect-ratio: 16/9;
+}
+
+.message-card {
+  padding: 1.5rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .carousel-nav-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+  
+  .resolution-title {
+    font-size: 2rem;
+  }
+  
+  .video-wrapper {
+    aspect-ratio: 4/5;
+    max-height: 70vh;
+  }
+  
+  .message-card {
+    padding: 1rem 1.25rem;
+  }
 }
