@@ -9,14 +9,14 @@ import './App.css';
 
 const apologyMessages = [
   { text: "I know I messed up, and I can't stop thinking about it." },
-  { 
-    text: "Our friendship means absolutely everything to me.", 
+  {
+    text: "Our friendship means absolutely everything to me.",
     // Uncomment and add your image name here (make sure the file is in the public/ folder)
     // image: "/memory1.jpg" 
   },
   { text: "I realize my mistake and how it made you feel." },
-  { 
-    text: "I am truly, deeply sorry.", 
+  {
+    text: "I am truly, deeply sorry.",
     // Uncomment and add your video name here (make sure the file is in the public/ folder)
     // video: "/funny-memory.mp4" 
   },
@@ -64,12 +64,12 @@ function App() {
               className="cards-container"
             >
               {apologyMessages.map((msg, index) => (
-                <MessageCard 
-                  key={index} 
-                  text={msg.text} 
-                  image={msg.image} 
-                  video={msg.video} 
-                  delay={index * 1.5} 
+                <MessageCard
+                  key={index}
+                  text={msg.text}
+                  image={msg.image}
+                  video={msg.video}
+                  delay={index * 1.5}
                 />
               ))}
 
@@ -117,6 +117,23 @@ function App() {
               <Confetti width={width} height={height} recycle={false} numberOfPieces={800} gravity={0.15} />
               <h1 className="resolution-title">Thank You! 💖</h1>
               <p className="final-message">I promise to make it up to you.</p>
+
+              {/* Replace "/your-video.mp4" with your actual video filename in the public/ folder */}
+              <video
+                src="/video_funny.mp4"
+                controls
+                autoPlay
+                muted
+                loop
+                style={{
+                  width: '100%',
+                  maxWidth: '500px',
+                  borderRadius: '1rem',
+                  marginTop: '2rem',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
+                  zIndex: 10
+                }}
+              />
             </motion.div>
           )}
         </AnimatePresence>
